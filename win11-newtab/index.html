@@ -1,41 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Windows 11 New Tab Extension</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f3f3f3;
-            color: #202020;
-            text-align: center;
-            padding: 5%;
-        }
-        .container {
-            background: #ffffff;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            max-width: 600px;
-            margin: auto;
-        }
-        h1 { color: #0078D4; } /* رنگ آبی استاندارد ویندوز ۱۱ */
-        p { font-size: 1.1em; line-height: 1.6; }
-        .footer { margin-top: 30px; font-size: 0.9em; }
-        a { color: #0078D4; text-decoration: none; font-weight: 600; }
-        a:hover { text-decoration: underline; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Windows 11 New Tab – Browser Extension</title>
+<meta name="description" content="Windows 11 New Tab is a free browser extension that replaces your new tab page with a customizable Windows 11-style desktop: shortcuts, widgets, wallpapers and optional Google backup.">
+<style>
+  :root{--bg:#f3f6fb;--card:#fff;--text:#1b2430;--muted:#5b6675;--accent:#0067c0;--border:#e1e7ef}
+  @media (prefers-color-scheme:dark){:root{--bg:#10151c;--card:#1a212b;--text:#e8edf4;--muted:#9aa6b6;--accent:#4cc2ff;--border:#2a3340}}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
+  header{padding:56px 20px 40px;text-align:center;background:linear-gradient(135deg,#0067c0,#3aa0ff);color:#fff}
+  header img{width:96px;height:96px;border-radius:20px;background:#fff;padding:8px}
+  header h1{margin:16px 0 8px;font-size:2.2rem}
+  header p{max-width:680px;margin:0 auto;font-size:1.1rem;opacity:.95}
+  main{max-width:900px;margin:0 auto;padding:28px 20px 60px}
+  section{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px 28px;margin-bottom:20px}
+  h2{margin-top:0;font-size:1.35rem}
+  ul{padding-left:22px}
+  a{color:var(--accent)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+  .grid div{border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+  .grid strong{display:block;margin-bottom:4px}
+  footer{text-align:center;color:var(--muted);padding:0 20px 40px;font-size:.9rem}
+  .fa{direction:rtl;text-align:right;font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif}
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1>Windows 11 New Tab</h1>
-        <p>Transform your browser's new tab into a beautiful, dynamic, and productive Windows 11 style interface.</p>
-        <p>Enjoy features like real-time weather updates via Open-Meteo and stunning dynamic wallpapers from Wallhaven and Unsplash.</p>
-        <div class="footer">
-            <a href="privacy.html">Privacy Policy</a> &nbsp;|&nbsp; 
-            <a href="https://github.com/aifio">Developer GitHub</a>
-        </div>
+<header>
+  <img src="icon.png" alt="Windows 11 New Tab logo">
+  <h1>Windows 11 New Tab</h1>
+  <p>A free browser extension that turns your new tab page into a customizable Windows 11-style desktop, with shortcuts, widgets, wallpapers and optional Google Drive backup.</p>
+</header>
+
+<main>
+  <section id="about">
+    <h2>What is Windows 11 New Tab?</h2>
+    <p><strong>Windows 11 New Tab</strong> is a browser extension for Google Chrome, Microsoft Edge and other Chromium-based browsers (and Firefox). It replaces the browser's default new tab page with a fast, personal desktop inspired by the Windows 11 look, so you can reach your favorite websites and tools in one click.</p>
+    <p>The extension is free to use. You do not need an account to use it. Signing in with Google is optional and is only used to back up and restore your own settings.</p>
+  </section>
+
+  <section id="features">
+    <h2>Features</h2>
+    <div class="grid">
+      <div><strong>Desktop &amp; shortcuts</strong>Add websites as desktop icons, organize them in folders and open them in the same tab or in in-page windows.</div>
+      <div><strong>Start menu &amp; taskbar</strong>A Windows 11-style Start menu, search box and taskbar that adapt to your window size.</div>
+      <div><strong>Widgets &amp; apps</strong>Clock, weather, calculator, notes and other small tools that you can place on the desktop.</div>
+      <div><strong>Wallpapers &amp; themes</strong>Use your own image or choose online wallpapers; light, dark and glass themes follow the wallpaper.</div>
+      <div><strong>Add to My websites</strong>A toolbar popup that adds the site you are viewing to your desktop with one click.</div>
+      <div><strong>Backup &amp; restore</strong>Export or import your data manually, or optionally sync it to your own private Google Drive app-data folder.</div>
     </div>
+  </section>
+
+  <section id="google">
+    <h2>How the extension uses Google sign-in and Google APIs</h2>
+    <p>Google sign-in is <strong>optional</strong>. If you choose to connect your Google account, the extension requests only these permissions:</p>
+    <ul>
+      <li><strong>Email address and basic profile (name, profile picture)</strong> – shown inside the extension so you can see which account is connected.</li>
+      <li><strong>Google Drive "App Data" folder (<code>drive.appdata</code>)</strong> – a hidden folder that only this extension can access. It is used solely to store a backup of your extension settings and shortcuts so you can restore them on another device. The extension cannot see or access any of your other Google Drive files.</li>
+    </ul>
+    <p>Your Google data is not sent to any server owned by the developer, is not sold, is not used for advertising, and is not used to train AI or machine-learning models. The extension's use of information received from Google APIs adheres to the <a href="https://developers.google.com/terms/api-services-user-data-policy#limited-use" target="_blank" rel="noopener">Google API Services User Data Policy</a>, including the Limited Use requirements.</p>
+    <p>This extension does not generate, edit or process images or any other content with Google APIs, and it does not use Google APIs for AI-generated or non-consensual intimate imagery of any kind.</p>
+    <p>You can disconnect Google at any time from the extension's account settings, or revoke access from your <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener">Google Account permissions page</a>.</p>
+  </section>
+
+  <section id="privacy">
+    <h2>Privacy</h2>
+    <p>Your shortcuts, settings and preferences are stored locally in your browser. Please read our full <a href="privacy.html"><strong>Privacy Policy</strong></a> for details about what data is stored, which third-party services are contacted and how to delete your data.</p>
+  </section>
+
+  <section id="install">
+    <h2>Get the extension</h2>
+    <p>Install Windows 11 New Tab from your browser's extension store (Chrome Web Store, Microsoft Edge Add-ons or Firefox Add-ons), or follow the link provided on this page when available.</p>
+  </section>
+
+  <section id="contact">
+    <h2>Contact &amp; support</h2>
+    <p>Questions, feedback or data requests: <a href="mailto:YOUR-EMAIL@example.com">YOUR-EMAIL@example.com</a></p>
+  </section>
+
+  <section class="fa" dir="rtl" lang="fa" id="fa">
+    <h2>درباره افزونه (فارسی)</h2>
+    <p><strong>Windows 11 New Tab</strong> یک افزونه رایگان برای مرورگر است که صفحه «تب جدید» را به یک دسکتاپ شخصی‌سازی‌شده با ظاهر ویندوز ۱۱ تبدیل می‌کند: میان‌بر سایت‌ها، ویجت‌ها، والپیپر و منوی استارت. ورود با حساب گوگل <strong>اختیاری</strong> است و فقط برای پشتیبان‌گیری و بازیابی تنظیمات شما در پوشه خصوصی App Data گوگل درایو استفاده می‌شود. اطلاعات گوگل شما فروخته یا برای تبلیغات و آموزش هوش مصنوعی استفاده نمی‌شود. برای جزئیات بیشتر <a href="privacy.html">سیاست حریم خصوصی</a> را ببینید.</p>
+  </section>
+</main>
+
+<footer>
+  <p>&copy; 2026 Windows 11 New Tab &middot; <a href="privacy.html">Privacy Policy</a> &middot; Windows 11 New Tab is an independent project and is not affiliated with or endorsed by Microsoft or Google.</p>
+</footer>
 </body>
 </html>
