@@ -1,191 +1,615 @@
-<div class="sarbazi-widget" dir="rtl">
-  <div class="sw-header">
-    <span class="sw-badge" id="sw-status">⏳ در حال محاسبه...</span>
-    <h3 class="sw-title">روزشمار پایان خدمت 🫡</h3>
-    <p class="sw-dates">اعزام: ۱ آذر ۱۴۰۵ | پایان: ۱ مرداد ۱۴۰۷</p>
-  </div>
-
-  <div class="sw-timer">
-    <div class="sw-box">
-      <span class="sw-num" id="sw-days">۰</span>
-      <span class="sw-label">روز</span>
-    </div>
-    <div class="sw-box">
-      <span class="sw-num" id="sw-hours">۰</span>
-      <span class="sw-label">ساعت</span>
-    </div>
-    <div class="sw-box">
-      <span class="sw-num" id="sw-mins">۰</span>
-      <span class="sw-label">دقیقه</span>
-    </div>
-    <div class="sw-box">
-      <span class="sw-num" id="sw-secs">۰</span>
-      <span class="sw-label">ثانیه</span>
-    </div>
-  </div>
-
-  <div class="sw-progress-wrap">
-    <div class="sw-progress-info">
-      <span id="sw-passed">سپری‌شده: ۰ روز</span>
-      <span id="sw-percent">۰٪</span>
-    </div>
-    <div class="sw-progress-bar">
-      <div class="sw-progress-fill" id="sw-fill"></div>
-    </div>
-  </div>
-</div>
-
-<style>
-  .sarbazi-widget {
-    max-width: 480px;
-    margin: 24px auto;
-    padding: 24px;
-    border-radius: 18px;
-    background: linear-gradient(145deg, #131b26, #1c2836);
-    color: #f1f5f9;
-    font-family: Vazirmatn, Tahoma, system-ui, sans-serif;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    text-align: center;
-  }
-
-  .sw-badge {
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 999px;
-    font-size: 12px;
-    background: rgba(56, 189, 248, 0.15);
-    color: #38bdf8;
-    margin-bottom: 10px;
-  }
-
-  .sw-title {
-    margin: 0 0 6px;
-    font-size: 20px;
-    font-weight: 700;
-  }
-
-  .sw-dates {
-    margin: 0 0 20px;
-    font-size: 13px;
-    color: #94a3b8;
-  }
-
-  .sw-timer {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    margin-bottom: 22px;
-  }
-
-  .sw-box {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    border-radius: 12px;
-    padding: 12px 6px;
-  }
-
-  .sw-num {
-    display: block;
-    font-size: 24px;
-    font-weight: 800;
-    color: #38bdf8;
-    line-height: 1.2;
-  }
-
-  .sw-label {
-    font-size: 12px;
-    color: #cbd5e1;
-  }
-
-  .sw-progress-info {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    color: #cbd5e1;
-    margin-bottom: 8px;
-  }
-
-  .sw-progress-bar {
-    height: 10px;
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 999px;
-    overflow: hidden;
-  }
-
-  .sw-progress-fill {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, #0ea5e9, #22c55e);
-    border-radius: 999px;
-    transition: width 0.6s ease;
-  }
-</style>
-
-<script>
-  (function () {
-    // تاریخ اعزام: ۱ آذر ۱۴۰۵
-    const startDate = new Date("2026-11-22T00:00:00+03:30").getTime();
-    // تاریخ پایان ۲۰ ماهه: ۱ مرداد ۱۴۰۷
-    const baseEndDate = new Date("2028-07-22T00:00:00+03:30").getTime();
-
-    // اگر کسری خدمت گرفتی، تعداد روزش رو اینجا وارد کن (مثلاً 60)
-    const kasriDays = 0;
-
-    const endDate = baseEndDate - kasriDays * 24 * 60 * 60 * 1000;
-    const totalDuration = endDate - startDate;
-    const totalDays = Math.round(totalDuration / (1000 * 60 * 60 * 24));
-
-    const toFa = (n) => n.toLocaleString("fa-IR");
-
-    function updateCountdown() {
-      const now = Date.now();
-      const statusEl = document.getElementById("sw-status");
-      const passedEl = document.getElementById("sw-passed");
-      const percentEl = document.getElementById("sw-percent");
-      const fillEl = document.getElementById("sw-fill");
-
-      let diff = 0;
-
-      if (now < startDate) {
-        // حالت قبل از اعزام
-        diff = startDate - now;
-        statusEl.textContent = "🎒 مانده تا اعزام به آموزشی";
-        passedEl.textContent = `کل دوره: ${toFa(totalDays)} روز`;
-        percentEl.textContent = "۰٪";
-        fillEl.style.width = "0%";
-      } else if (now >= endDate) {
-        // حالت پایان خدمت
-        diff = 0;
-        statusEl.textContent = "🎉 پایان خدمت! آزادی مبارک";
-        passedEl.textContent = `تکمیل شد: ${toFa(totalDays)} روز`;
-        percentEl.textContent = "۱۰۰٪";
-        fillEl.style.width = "100%";
-      } else {
-        // حالت حین خدمت
-        diff = endDate - now;
-        const elapsed = now - startDate;
-        const daysPassed = Math.floor(elapsed / (1000 * 60 * 60 * 24));
-        const percent = ((elapsed / totalDuration) * 100).toFixed(2);
-
-        statusEl.textContent = "🔥 در حال گذراندن خدمت";
-        passedEl.textContent = `سپری‌شده: ${toFa(daysPassed)} از ${toFa(totalDays)} روز`;
-        percentEl.textContent = `${Number(percent).toLocaleString("fa-IR")}٪`;
-        fillEl.style.width = `${percent}%`;
-      }
-
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const mins = Math.floor((diff / (1000 * 60)) % 60);
-      const secs = Math.floor((diff / 1000) % 60);
-
-      document.getElementById("sw-days").textContent = toFa(days);
-      document.getElementById("sw-hours").textContent = toFa(hours);
-      document.getElementById("sw-mins").textContent = toFa(mins);
-      document.getElementById("sw-secs").textContent = toFa(secs);
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>روزشمار پایان خدمت 🫡</title>
+  
+  <!-- آیکون اختصاصی ارتش برای بالای تب مرورگر (Favicon) -->
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/aifio/aifio.github.io/main/Soldier/icon.png" />
+  
+  <!-- فونت زیبای وزیرمتن -->
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" />
+  
+  <style>
+    :root {
+      --bg-dark: #070d0a;
+      --card-bg: rgba(9, 20, 14, 0.78);
+      --border-glow: rgba(16, 185, 129, 0.35);
+      --accent: #10b981;
+      --accent-soft: rgba(16, 185, 129, 0.16);
+      --gold: #f59e0b;
+      --text-main: #f0fdf4;
+      --text-muted: #94a3b8;
     }
 
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-  })();
-</script>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 14px;
+      font-family: Vazirmatn, Tahoma, system-ui, sans-serif;
+      color: var(--text-main);
+      background-color: var(--bg-dark);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* بک‌گراند: والپیپر حماسی نیروی زمینی ارتش + فیلتر تاریک تاکتیکال */
+    .bg-image {
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      background-image: 
+        linear-gradient(to bottom, rgba(7, 13, 10, 0.85), rgba(7, 13, 10, 0.93)),
+        url('https://raw.githubusercontent.com/aifio/aifio.github.io/main/Soldier/wallpaper.jpg');
+      background-size: cover;
+      background-position: center;
+      filter: contrast(1.1) brightness(0.85);
+    }
+
+    /* خطوط شبکه نظامی */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background-image:
+        linear-gradient(rgba(16, 185, 129, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(16, 185, 129, 0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    /* افکت رادار چرخان در پس‌زمینه */
+    .radar-ring {
+      position: fixed;
+      width: 650px;
+      height: 650px;
+      border-radius: 50%;
+      border: 1px dashed rgba(16, 185, 129, 0.14);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .radar-ring::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, rgba(16, 185, 129, 0.1) 0deg, transparent 60deg, transparent 360deg);
+      animation: radarSpin 10s linear infinite;
+    }
+
+    @keyframes radarSpin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* کارت اصلی شیشه‌ای */
+    .card {
+      width: 100%;
+      max-width: 500px;
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-glow);
+      border-radius: 28px;
+      padding: 30px 24px;
+      box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.8),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* نوار نوری بالای کارت */
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 15%;
+      right: 15%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), var(--gold), transparent);
+    }
+
+    /* هدر و نشان نظامی ارتش */
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .emblem-wrap {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 16px;
+      border-radius: 20px;
+      background: linear-gradient(145deg, rgba(16, 185, 129, 0.25), rgba(16, 185, 129, 0.06));
+      border: 1.5px solid rgba(16, 185, 129, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
+      overflow: hidden;
+    }
+
+    .emblem-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      background: var(--accent-soft);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #6ee7b7;
+      margin-bottom: 14px;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 12px var(--accent);
+      animation: pulse 1.6s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.4) opacity: 0.5; }
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: 850;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .subtitle span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* باکس‌های تایمر */
+    .timer-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .time-box {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 16px;
+      padding: 16px 4px;
+      text-align: center;
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+
+    .time-box:hover {
+      transform: translateY(-3px);
+      border-color: rgba(16, 185, 129, 0.5);
+    }
+
+    .time-box.highlight {
+      background: linear-gradient(180deg, rgba(16, 185, 129, 0.18), rgba(16, 185, 129, 0.04));
+      border-color: rgba(16, 185, 129, 0.45);
+    }
+
+    .time-num {
+      display: block;
+      font-size: 28px;
+      font-weight: 850;
+      color: #ffffff;
+      line-height: 1.2;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .time-box.highlight .time-num {
+      color: #34d399;
+    }
+
+    .time-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    /* نوار پیشرفت */
+    .progress-section {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
+    .progress-percent {
+      font-weight: 850;
+      color: var(--gold);
+      font-size: 15px;
+    }
+
+    .progress-track {
+      height: 12px;
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #059669, #10b981, #f59e0b);
+      border-radius: 999px;
+      transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow: 0 0 16px rgba(16, 185, 129, 0.6);
+    }
+
+    /* آمارهای جانبی */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 16px;
+      padding: 14px 6px;
+      text-align: center;
+    }
+
+    .stat-icon {
+      width: 20px;
+      height: 20px;
+      margin: 0 auto 6px;
+      color: var(--gold);
+    }
+
+    .stat-val {
+      display: block;
+      font-size: 15px;
+      font-weight: 800;
+      color: #f8fafc;
+    }
+
+    .stat-key {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* نقشه راه مراحل خدمت */
+    .milestones {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      padding: 10px 4px 0;
+    }
+
+    .milestones::before {
+      content: "";
+      position: absolute;
+      top: 22px;
+      right: 12%;
+      left: 12%;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.12);
+      z-index: 0;
+    }
+
+    .step {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      flex: 1;
+    }
+
+    .step-dot {
+      width: 26px;
+      height: 26px;
+      margin: 0 auto 8px;
+      border-radius: 50%;
+      background: #0b1511;
+      border: 2px solid rgba(255, 255, 255, 0.22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: bold;
+    }
+
+    .step.done .step-dot {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #022c22;
+      box-shadow: 0 0 14px rgba(16, 185, 129, 0.6);
+    }
+
+    .step.active .step-dot {
+      border-color: var(--gold);
+      color: var(--gold);
+      box-shadow: 0 0 14px rgba(245, 158, 11, 0.55);
+    }
+
+    .step-title {
+      font-size: 11px;
+      color: #cbd5e1;
+      font-weight: 700;
+    }
+
+    .step-date {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    @media (max-width: 420px) {
+      .card { padding: 24px 16px; }
+      .time-num { font-size: 24px; }
+      .title { font-size: 21px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-image"></div>
+  <div class="bg-grid"></div>
+  <div class="radar-ring"></div>
+
+  <main class="card">
+    <header class="header">
+      <div class="emblem-wrap">
+        <!-- آیکون اختصاصی ارتش و نزاجا -->
+        <img src="https://raw.githubusercontent.com/aifio/aifio.github.io/main/Soldier/icon.png" alt="نشان نزاجا" />
+      </div>
+
+      <div class="status-pill">
+        <span class="pulse-dot"></span>
+        <span id="status-text">در حال بررسی مأموریت...</span>
+      </div>
+
+      <h1 class="title">روزشمار پایان خدمت</h1>
+
+      <div class="subtitle">
+        <span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          اعزام: ۱ آذر ۱۴۰۵
+        </span>
+        <span>•</span>
+        <span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>
+          </svg>
+          ترخیص: ۱ مرداد ۱۴۰۷
+        </span>
+      </div>
+    </header>
+
+    <!-- تایمر اصلی -->
+    <section class="timer-grid">
+      <div class="time-box highlight">
+        <span class="time-num" id="days">۰</span>
+        <span class="time-label">روز</span>
+      </div>
+      <div class="time-box">
+        <span class="time-num" id="hours">۰</span>
+        <span class="time-label">ساعت</span>
+      </div>
+      <div class="time-box">
+        <span class="time-num" id="mins">۰</span>
+        <span class="time-label">دقیقه</span>
+      </div>
+      <div class="time-box">
+        <span class="time-num" id="secs">۰</span>
+        <span class="time-label">ثانیه</span>
+      </div>
+    </section>
+
+    <!-- نوار پیشرفت -->
+    <section class="progress-section">
+      <div class="progress-top">
+        <span id="progress-label">پیشرفت کل مأموریت ۲۰ ماهه</span>
+        <span class="progress-percent" id="percent-text">۰٪</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </section>
+
+    <!-- کارت‌های آمار -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+        </svg>
+        <span class="stat-val" id="passed-days">۰ روز</span>
+        <span class="stat-key">خدمت‌شده</span>
+      </div>
+
+      <div class="stat-card">
+        <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+        <span class="stat-val" id="remain-weeks">۰ هفته</span>
+        <span class="stat-key">باقی‌مانده</span>
+      </div>
+
+      <div class="stat-card">
+        <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+        <span class="stat-val" id="total-days-text">۶۰۸ روز</span>
+        <span class="stat-key">کل دوره</span>
+      </div>
+    </section>
+
+    <!-- نقشه راه خدمت -->
+    <section class="milestones">
+      <div class="step" id="step-1">
+        <div class="step-dot">۱</div>
+        <div class="step-title">اعزام</div>
+        <div class="step-date">۱ آذر ۰۵</div>
+      </div>
+      <div class="step" id="step-2">
+        <div class="step-dot">۲</div>
+        <div class="step-title">پایان آموزشی</div>
+        <div class="step-date">۱ بهمن ۰۵</div>
+      </div>
+      <div class="step" id="step-3">
+        <div class="step-dot">۳</div>
+        <div class="step-title">نیمه راه</div>
+        <div class="step-date">۱ مهر ۰۶</div>
+      </div>
+      <div class="step" id="step-4">
+        <div class="step-dot">★</div>
+        <div class="step-title">ترخیص</div>
+        <div class="step-date">۱ مرداد ۰۷</div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      // تاریخ‌های کلیدی (ساعت رسمی ایران)
+      const startDate = new Date("2026-11-22T00:00:00+03:30").getTime();       // ۱ آذر ۱۴۰۵
+      const bootcampEnd = new Date("2027-01-21T00:00:00+03:30").getTime();     // ۱ بهمن ۱۴۰۵ (تقریبی ۲ ماه)
+      const baseEndDate = new Date("2028-07-22T00:00:00+03:30").getTime();     // ۱ مرداد ۱۴۰۷
+
+      // تعداد روز کسری خدمت (در صورت وجود تغییر دهید)
+      const kasriDays = 0;
+
+      const endDate = baseEndDate - kasriDays * 86400000;
+      const totalDuration = endDate - startDate;
+      const halfDate = startDate + totalDuration / 2;
+      const totalDays = Math.round(totalDuration / 86400000);
+
+      const toFa = (n) => n.toLocaleString("fa-IR");
+      document.getElementById("total-days-text").textContent = `${toFa(totalDays)} روز`;
+
+      function setSteps(now) {
+        const steps = [
+          { el: document.getElementById("step-1"), time: startDate },
+          { el: document.getElementById("step-2"), time: bootcampEnd },
+          { el: document.getElementById("step-3"), time: halfDate },
+          { el: document.getElementById("step-4"), time: endDate },
+        ];
+
+        steps.forEach((s) => s.el.classList.remove("done", "active"));
+
+        let activeFound = false;
+        for (let i = 0; i < steps.length; i++) {
+          if (now >= steps[i].time) {
+            steps[i].el.classList.add("done");
+          } else if (!activeFound) {
+            steps[i].el.classList.add("active");
+            activeFound = true;
+          }
+        }
+      }
+
+      function update() {
+        const now = Date.now();
+        const statusEl = document.getElementById("status-text");
+        const passedEl = document.getElementById("passed-days");
+        const weeksEl = document.getElementById("remain-weeks");
+        const percentEl = document.getElementById("percent-text");
+        const fillEl = document.getElementById("progress-fill");
+
+        let diff = 0;
+
+        if (now < startDate) {
+          diff = startDate - now;
+          statusEl.textContent = "آماده‌باش! مانده تا اعزام به آموزشی 🎒";
+          passedEl.textContent = "۰ روز";
+          weeksEl.textContent = `${toFa(Math.ceil(totalDays / 7))} هفته`;
+          percentEl.textContent = "۰٪";
+          fillEl.style.width = "0%";
+        } else if (now >= endDate) {
+          diff = 0;
+          statusEl.textContent = "پایان مأموریت! کارت پایان خدمت صادر شد 🎉";
+          passedEl.textContent = `${toFa(totalDays)} روز`;
+          weeksEl.textContent = "۰ هفته";
+          percentEl.textContent = "۱۰۰٪";
+          fillEl.style.width = "100%";
+        } else {
+          diff = endDate - now;
+          const elapsed = now - startDate;
+          const daysPassed = Math.floor(elapsed / 86400000);
+          const remainWeeks = Math.ceil(diff / (86400000 * 7));
+          const percent = ((elapsed / totalDuration) * 100).toFixed(2);
+
+          statusEl.textContent = now < bootcampEnd
+            ? "دوره آموزشی در پادگان نزاجا 🪖"
+            : "در حال گذراندن مأموریت در یگان";
+
+          passedEl.textContent = `${toFa(daysPassed)} روز`;
+          weeksEl.textContent = `${toFa(remainWeeks)} هفته`;
+          percentEl.textContent = `${Number(percent).toLocaleString("fa-IR")}٪`;
+          fillEl.style.width = `${percent}%`;
+        }
+
+        const days = Math.floor(diff / 86400000);
+        const hours = Math.floor((diff / 3600000) % 24);
+        const mins = Math.floor((diff / 60000) % 60);
+        const secs = Math.floor((diff / 1000) % 60);
+
+        document.getElementById("days").textContent = toFa(days);
+        document.getElementById("hours").textContent = toFa(hours);
+        document.getElementById("mins").textContent = toFa(mins);
+        document.getElementById("secs").textContent = toFa(secs);
+
+        setSteps(now);
+      }
+
+      update();
+      setInterval(update, 1000);
+    })();
+  </script>
+</body>
+</html>
