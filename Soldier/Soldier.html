@@ -1,0 +1,193 @@
+<!-- شروع ویجت روزشمار سربازی -->
+<div class="sarbazi-widget" dir="rtl">
+  <div class="sw-header">
+    <span class="sw-badge" id="sw-status">⏳ در حال محاسبه...</span>
+    <h3 class="sw-title">روزشمار پایان خدمت 🫡</h3>
+    <p class="sw-dates">اعزام: ۱ آذر ۱۴۰۵ | پایان: ۱ مرداد ۱۴۰۷</p>
+  </div>
+
+  <div class="sw-timer">
+    <div class="sw-box">
+      <span class="sw-num" id="sw-days">۰</span>
+      <span class="sw-label">روز</span>
+    </div>
+    <div class="sw-box">
+      <span class="sw-num" id="sw-hours">۰</span>
+      <span class="sw-label">ساعت</span>
+    </div>
+    <div class="sw-box">
+      <span class="sw-num" id="sw-mins">۰</span>
+      <span class="sw-label">دقیقه</span>
+    </div>
+    <div class="sw-box">
+      <span class="sw-num" id="sw-secs">۰</span>
+      <span class="sw-label">ثانیه</span>
+    </div>
+  </div>
+
+  <div class="sw-progress-wrap">
+    <div class="sw-progress-info">
+      <span id="sw-passed">سپری‌شده: ۰ روز</span>
+      <span id="sw-percent">۰٪</span>
+    </div>
+    <div class="sw-progress-bar">
+      <div class="sw-progress-fill" id="sw-fill"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .sarbazi-widget {
+    max-width: 480px;
+    margin: 24px auto;
+    padding: 24px;
+    border-radius: 18px;
+    background: linear-gradient(145deg, #131b26, #1c2836);
+    color: #f1f5f9;
+    font-family: Vazirmatn, Tahoma, system-ui, sans-serif;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: center;
+  }
+
+  .sw-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+    margin-bottom: 10px;
+  }
+
+  .sw-title {
+    margin: 0 0 6px;
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .sw-dates {
+    margin: 0 0 20px;
+    font-size: 13px;
+    color: #94a3b8;
+  }
+
+  .sw-timer {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+
+  .sw-box {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 12px;
+    padding: 12px 6px;
+  }
+
+  .sw-num {
+    display: block;
+    font-size: 24px;
+    font-weight: 800;
+    color: #38bdf8;
+    line-height: 1.2;
+  }
+
+  .sw-label {
+    font-size: 12px;
+    color: #cbd5e1;
+  }
+
+  .sw-progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #cbd5e1;
+    margin-bottom: 8px;
+  }
+
+  .sw-progress-bar {
+    height: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .sw-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #0ea5e9, #22c55e);
+    border-radius: 999px;
+    transition: width 0.6s ease;
+  }
+</style>
+
+<script>
+  (function () {
+    // تاریخ اعزام: ۱ آذر ۱۴۰۵
+    const startDate = new Date("2026-11-22T00:00:00+03:30").getTime();
+    // تاریخ پایان ۲۰ ماهه: ۱ مرداد ۱۴۰۷
+    const baseEndDate = new Date("2028-07-22T00:00:00+03:30").getTime();
+
+    // اگر کسری خدمت گرفتی، تعداد روزش رو اینجا وارد کن (مثلاً 60)
+    const kasriDays = 0;
+
+    const endDate = baseEndDate - kasriDays * 24 * 60 * 60 * 1000;
+    const totalDuration = endDate - startDate;
+    const totalDays = Math.round(totalDuration / (1000 * 60 * 60 * 24));
+
+    const toFa = (n) => n.toLocaleString("fa-IR");
+
+    function updateCountdown() {
+      const now = Date.now();
+      const statusEl = document.getElementById("sw-status");
+      const passedEl = document.getElementById("sw-passed");
+      const percentEl = document.getElementById("sw-percent");
+      const fillEl = document.getElementById("sw-fill");
+
+      let diff = 0;
+
+      if (now < startDate) {
+        // حالت قبل از اعزام
+        diff = startDate - now;
+        statusEl.textContent = "🎒 مانده تا اعزام به آموزشی";
+        passedEl.textContent = `کل دوره: ${toFa(totalDays)} روز`;
+        percentEl.textContent = "۰٪";
+        fillEl.style.width = "0%";
+      } else if (now >= endDate) {
+        // حالت پایان خدمت
+        diff = 0;
+        statusEl.textContent = "🎉 پایان خدمت! آزادی مبارک";
+        passedEl.textContent = `تکمیل شد: ${toFa(totalDays)} روز`;
+        percentEl.textContent = "۱۰۰٪";
+        fillEl.style.width = "100%";
+      } else {
+        // حالت حین خدمت
+        diff = endDate - now;
+        const elapsed = now - startDate;
+        const daysPassed = Math.floor(elapsed / (1000 * 60 * 60 * 24));
+        const percent = ((elapsed / totalDuration) * 100).toFixed(2);
+
+        statusEl.textContent = "🔥 در حال گذراندن خدمت";
+        passedEl.textContent = `سپری‌شده: ${toFa(daysPassed)} از ${toFa(totalDays)} روز`;
+        percentEl.textContent = `${Number(percent).toLocaleString("fa-IR")}٪`;
+        fillEl.style.width = `${percent}%`;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const mins = Math.floor((diff / (1000 * 60)) % 60);
+      const secs = Math.floor((diff / 1000) % 60);
+
+      document.getElementById("sw-days").textContent = toFa(days);
+      document.getElementById("sw-hours").textContent = toFa(hours);
+      document.getElementById("sw-mins").textContent = toFa(mins);
+      document.getElementById("sw-secs").textContent = toFa(secs);
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  })();
+</script>
+<!-- پایان ویجت روزشمار سربازی -->
