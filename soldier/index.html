@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>روزشمار پایان خدمت 🫡</title>
-  
-  <!-- آیکون اختصاصی ارتش برای بالای تب مرورگر (Favicon) -->
-  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/aifio/aifio.github.io/main/soldier/icon.png" />
-  
+
+  <!-- آیکون بالای تب مرورگر (Favicon) -->
+  <link rel="icon" type="image/png" href="./icon.png" />
+
   <!-- فونت زیبای وزیرمتن -->
   <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" />
-  
+
   <style>
     :root {
       --bg-dark: #070d0a;
@@ -42,17 +42,17 @@
       position: relative;
     }
 
-    /* بک‌گراند: والپیپر حماسی نیروی زمینی ارتش + فیلتر تاریک تاکتیکال */
+    /* بک‌گراند اختصاصی با آدرس نسبی */
     .bg-image {
       position: fixed;
       inset: 0;
       z-index: -3;
-      background-image: 
-        linear-gradient(to bottom, rgba(7, 13, 10, 0.85), rgba(7, 13, 10, 0.93)),
-        url('https://raw.githubusercontent.com/aifio/aifio.github.io/main/soldier/wallpaper.jpg');
+      background-image:
+        linear-gradient(to bottom, rgba(7, 13, 10, 0.8), rgba(7, 13, 10, 0.92)),
+        url('./wallpaper.jpg');
       background-size: cover;
       background-position: center;
-      filter: contrast(1.1) brightness(0.85);
+      filter: contrast(1.08) brightness(0.9);
     }
 
     /* خطوط شبکه نظامی */
@@ -122,7 +122,7 @@
       background: linear-gradient(90deg, transparent, var(--accent), var(--gold), transparent);
     }
 
-    /* هدر و نشان نظامی ارتش */
+    /* هدر و نشان */
     .header {
       text-align: center;
       margin-bottom: 24px;
@@ -173,7 +173,7 @@
 
     @keyframes pulse {
       0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.4) opacity: 0.5; }
+      50% { transform: scale(1.4); opacity: 0.5; }
     }
 
     .title {
@@ -181,7 +181,7 @@
       font-weight: 850;
       letter-spacing: -0.5px;
       margin-bottom: 8px;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     }
 
     .subtitle {
@@ -403,8 +403,7 @@
   <main class="card">
     <header class="header">
       <div class="emblem-wrap">
-        <!-- آیکون اختصاصی ارتش و نزاجا -->
-        <img src="https://raw.githubusercontent.com/aifio/aifio.github.io/main/Soldier/icon.png" alt="نشان نزاجا" />
+        <img src="./icon.png" alt="نشان خدمت" />
       </div>
 
       <div class="status-pill">
